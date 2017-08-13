@@ -4,11 +4,17 @@ import com.sash.dev.UserService.UserService;
 import com.sash.dev.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
     @Autowired
@@ -29,9 +35,15 @@ public class UserController {
         return service.findAll();
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @RequestMapping(value = "/user", method = RequestMethod.POST, consumes = "application/json" )
     ResponseEntity addUser(@RequestBody User user) {
             service.save(user);
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE, consumes = "application/json" )
+    ResponseEntity removeUser(@PathVariable String id) {
+        service.delete(id);
         return ResponseEntity.ok().build();
     }
 
